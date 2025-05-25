@@ -59,7 +59,7 @@ CHECKPOINT_ITERATIONS = 10**2
 RANGE = 20
 DICE_COUNT = 11
 #ITERATIONS = 10**6
-ITERATIONS = 10**10
+ITERATIONS = 10**7
 
 MIN_SUM = 1 * DICE_COUNT
 ARRAY_SIZE = RANGE * DICE_COUNT - MIN_SUM + 1
@@ -76,7 +76,7 @@ def format_probabilities(prob, prev, next, max_prob):
     prev_count = int(prev*MAX_PROB_LENGTH/max_prob)
     count = int(prob*MAX_PROB_LENGTH/max_prob)
     next_count = int(next*MAX_PROB_LENGTH/max_prob)
-    string = f"|{("").rjust(count, "⠿")}"
+    string = f"|" + ("").rjust(count, "⠿")
 
     big_up_symbol = "⠍"
     big_down_symbol = "⠥"
@@ -248,7 +248,7 @@ for number in range(MIN_SUM, ARRAY_SIZE + 1):
     prob = probabilities[i]
     prev = probabilities[i - 1] if i > 0 else prob
     next = probabilities[i + 1] if i < ARRAY_SIZE - 1 else prob
-    print(f"{format_number(number)} {str(counter[i]).rjust(len(str(ITERATIONS)), " ")} {format_probabilities(prob, prev, next, MAX_PROB)}")
+    print(f"{format_number(number)} {str(counter[i]).rjust(len(str(ITERATIONS)), ' ')} {format_probabilities(prob, prev, next, MAX_PROB)}")
 
 with open(f"{DICE_COUNT}_{RANGE}-face-dice_{ITERATIONS:,}.json", "w") as f:
     json.dump({"iterations": ITERATIONS, "cores": CORES, "processing_duration_ms": processing_duration_ms, "counter": counter, "probabilities": probabilities}, f)
