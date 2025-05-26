@@ -1,2 +1,2 @@
 *.json
-venv_*
+python/.venv_*

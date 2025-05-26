@@ -243,12 +243,13 @@ else:
 print(string)
 print(f"Total processing time is {round(processing_duration_ms):,} miliseconds or {p_h} hour(s) {p_m} minute(s) {p_s} second(s)")
 
-for number in range(MIN_SUM, ARRAY_SIZE + 1):
-    i = number - 1
+for number in range(ARRAY_SIZE):
+    i = number
+    sum = i + MIN_SUM
     prob = probabilities[i]
     prev = probabilities[i - 1] if i > 0 else prob
     next = probabilities[i + 1] if i < ARRAY_SIZE - 1 else prob
-    print(f"{format_number(number)} {str(counter[i]).rjust(len(str(ITERATIONS)), ' ')} {format_probabilities(prob, prev, next, MAX_PROB)}")
+    print(f"{format_number(sum)} {str(counter[i]).rjust(len(str(ITERATIONS)), ' ')} {format_probabilities(prob, prev, next, MAX_PROB)}")
 
 with open(f"{DICE_COUNT}_{RANGE}-face-dice_{ITERATIONS:,}.json", "w") as f:
     json.dump({"iterations": ITERATIONS, "cores": CORES, "processing_duration_ms": processing_duration_ms, "counter": counter, "probabilities": probabilities}, f)
