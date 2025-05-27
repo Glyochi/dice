@@ -5,7 +5,7 @@ import json
 GLY_RANDOM = False 
 PYTHON_DEFAULT = True 
 RAND_INT = False 
-RAND_BIT = True 
+RAND_BIT = False 
 
 def init_pool_processes(the_lock, the_finished_iterations):
     import numpy as np
@@ -24,14 +24,13 @@ def init_pool_processes(the_lock, the_finished_iterations):
         if PYTHON_DEFAULT:
             if RAND_INT:
                 def get_rand(rand_range):
-                    return random.randint(1, rand_range + 1)
+                    return random.randint(1, rand_range)
             elif RAND_BIT:
                 def get_rand(rand_range):
                     num = rand_range 
                     while num > rand_range - 1:
                         num = random.getrandbits(5)
                     return int(num + 1) 
-                    return int(random.random() * rand_range) + 1
             else:
                 def get_rand(rand_range):
                     return int(random.random() * rand_range) + 1
