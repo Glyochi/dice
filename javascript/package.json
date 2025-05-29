@@ -1,0 +1,13 @@
+{
+  "name": "dist",
+  "version": "1.0.0",
+  "description": "",
+  "main": "singleThread.js",
+  "scripts": {
+    "single": "node singleThread.js",
+    "multi": "node multiThread.js"
+  },
+  "keywords": [],
+  "author": "Brandon C.",
+  "license": "ISC"
+}
