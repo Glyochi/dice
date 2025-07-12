@@ -1,6 +1,6 @@
 const DICE_FACE = 20;
 const NUM_DICE = 11;
-const ITERATIONS = 10 ** 7;
+const ITERATIONS = 10 ** 8;
 
 const MIN_VALUE = NUM_DICE;
 const MAX_VALUE = NUM_DICE * DICE_FACE;
@@ -57,6 +57,29 @@ function getBar(previousValue, currentValue, nextValue, largestCount) {
   return string;
 }
 
+function printProgress(startTime, progress, isCompleted = false) {
+  const currentTime = new Date();
+  const diffInSec = getDiffSeconds(currentTime, startTime);
+  const { h, m, s, deci } = getHourMinSecBySec(diffInSec);
+  const { h: eta_h, m: eta_m, s: eta_s, deci: eta_deci } = getHourMinSecBySec((diffInSec * (ITERATIONS - progress) / progress));
+
+  console.log(
+    `Progess: ${(progress * 100 / ITERATIONS).toFixed(1).padStart(5)}%  ` +
+    `${progress.toLocaleString().padStart(ITERATIONS.toLocaleString().length)}/${ITERATIONS.toLocaleString()}  ` +
+    `Elapsed: ${h}:${m.toLocaleString().padStart(2, '0')}:${s.toLocaleString().padStart(2, '0')}${deci}  ` +
+    `ETA: ${eta_h}:${eta_m.toLocaleString().padStart(2, '0')}:${eta_s.toLocaleString().padStart(2, '0')}${eta_deci}`
+  );
+
+  if (isCompleted) {
+    console.log(`\n\n\n\n`);
+    console.log(`Rolling and summing ${NUM_DICE.toLocaleString()} ${DICE_FACE.toLocaleString()}-face-dice ${ITERATIONS.toLocaleString()} times`);
+    console.log(`Simulating with Javascript - Multi-thread`);
+    console.log(`Total processing time is ${s} seconds or ${h} hour(s) ${m} minute(s) ${s + deci} second(s)`);
+  }
+
+  return currentTime;
+}
+
 function rollDice() {
   return Math.floor(Math.random() * DICE_FACE) + 1;
 }
@@ -87,16 +110,14 @@ const main = () => {
     }
 
     const currentTime = new Date();
-    if (getDiffSeconds(currentTime, lastUpdated) > PROGRESS_UPDATE_FREQUENCY || 
-        (progress * 100 / ITERATIONS) % 100 === 0) {
-      const { h, m, s, deci } = getHourMinSecBySec(getDiffSeconds(currentTime, startTime));
-
-      console.log(`Progess: ${(progress * 100 / ITERATIONS).toFixed(1).padStart(5)}%  ` +
-        `${progress.toLocaleString().padStart(ITERATIONS.toLocaleString().length)}/${ITERATIONS}  ` +
-        `Elapsed: ${h}:${m.toLocaleString().padStart(2, '0')}:${s.toLocaleString().padStart(2, '0')}${deci}`);
-
-      lastUpdated = currentTime;
+    if (getDiffSeconds(currentTime, lastUpdated) > PROGRESS_UPDATE_FREQUENCY || (progress * 100 / ITERATIONS) % 100 === 0) {
+      printProgress(startTime, progress, progress >= ITERATIONS);
+      lastUpdated = new Date();
     }
+  }
+  
+  if (lastUpdated < new Date()) {
+    printProgress(startTime, progress, true);
   }
 
   for (let i = MIN_VALUE; i <= MAX_VALUE; i++) {
@@ -110,11 +131,6 @@ const main = () => {
 
     console.log(res);
   }
-
-  const { h, m, s, deci } = getHourMinSecBySec(getDiffSeconds(new Date(), startTime));
-  console.log(`Rolling and summing ${NUM_DICE.toLocaleString()} ${DICE_FACE.toLocaleString()}-face-dice ${ITERATIONS.toLocaleString()} times`);
-  console.log(`Simulating with Javascript - Single-thread`);
-  console.log(`Total processing time is ${s} seconds or ${h} hour(s) ${m} minute(s) ${s + deci} second(s)`);
 }
 
 main();

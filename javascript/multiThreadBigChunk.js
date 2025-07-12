@@ -136,7 +136,7 @@ const main = () => {
   // create workers
   for (let i = 0; i < NUM_WORKERS; i++) {
     const worker = new Worker(__filename);
-
+    
     if (remainingIterations - CHUNK_SIZE > 0) {
       worker.postMessage({ id: i, chunkSize: CHUNK_SIZE });
       remainingIterations -= CHUNK_SIZE;
