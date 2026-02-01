@@ -1,2 +1,6 @@
 *.json
 python/.venv_*
+
+// Needed for javascript project
+!package.json
+!package-lock.json
